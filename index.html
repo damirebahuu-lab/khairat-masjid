@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#065f46">
     <title>Khairat Digital Masjid</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    
     <style>
         :root {
-            --primary: #065f46; /* Hijau Masjid Gelap */
-            --accent: #fbbf24; /* Kuning Emas */
-            --bg: #f3f4f6;
+            --primary: #065f46; /* Hijau Masjid */
+            --primary-dark: #047857;
+            --accent: #fbbf24; /* Emas */
+            --bg: #f8fafc;
             --white: #ffffff;
-            --danger: #dc2626; /* Merah Amaran */
+            --danger: #dc2626;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -20,216 +26,332 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
-            color: #1f2937;
-            margin: 0;
-            padding-bottom: 100px; /* Ruang untuk menu bawah */
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            padding-bottom: 110px; /* Ruang untuk menu bawah */
         }
 
-        /* HEADER DENGAN UCAPAN */
-        .header-bg {
-            background: linear-gradient(135deg, #065f46 0%, #047857 100%);
-            color: white;
-            padding: 30px 20px 50px;
-            border-radius: 0 0 35px 35px;
-            box-shadow: 0 4px 20px rgba(6, 95, 70, 0.3);
+        /* HEADER */
+        .header-hero {
+            background: linear-gradient(160deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 40px 20px 60px;
+            border-radius: 0 0 40px 40px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(6, 95, 70, 0.25);
+            position: relative;
         }
-        .salam-text { font-size: 1rem; opacity: 0.9; margin-bottom: 5px; }
-        .masjid-name { font-size: 1.8rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
-
-        /* KAD STATISTIK (BESAR) */
-        .stats-box {
-            display: flex;
+        .header-salam { font-size: 0.95rem; opacity: 0.9; margin-bottom: 8px; font-weight: 500; }
+        .header-title { font-size: 2rem; font-weight: 800; margin: 0; letter-spacing: -1px; line-height: 1.1; }
+        
+        /* KAD STATISTIK */
+        .stats-float {
+            display: flex; gap: 12px;
             justify-content: center;
-            gap: 15px;
-            margin-top: -35px;
-            padding: 0 15px;
+            padding: 0 20px;
+            margin-top: -40px;
         }
         .stat-card {
-            background: white;
+            background: var(--white);
             flex: 1;
-            padding: 20px 10px;
+            padding: 20px 15px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            border-bottom: 5px solid var(--accent);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
         }
-        .stat-num { font-size: 2rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
-        .stat-label { font-size: 0.8rem; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+        .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
+        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 6px; display: block; }
 
-        /* KANDUNGAN UTAMA */
-        .content-area { padding: 25px 20px; animation: slideUp 0.5s ease; }
-        .tab-section { display: none; }
-        .tab-section.active { display: block; }
+        /* KANDUNGAN TABS */
+        .tab-content { display: none; padding: 30px 20px; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
 
-        /* BUTANG KECEMASAN (BERDENYUT) */
+        /* BUTANG SOS (Kecemasan) */
+        .emergency-grid { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 25px; }
         .btn-sos {
-            background: var(--danger);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            width: 100%;
-            padding: 20px;
-            border-radius: 18px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 800;
-            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
+            background: var(--danger); color: white;
+            padding: 18px; border-radius: 18px;
+            text-decoration: none; font-weight: 800; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
             animation: pulse 2s infinite;
-            margin-bottom: 30px;
-            border: 2px solid white;
+        }
+        .btn-call {
+            background: var(--white); color: var(--danger);
+            border: 2px solid var(--danger);
+            width: 60px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; text-decoration: none;
         }
 
-        /* INPUT CARIAN (BESAR) */
-        .search-container {
-            background: white;
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            text-align: center;
+        /* INPUT CARIAN */
+        .search-wrapper {
+            background: var(--white);
+            padding: 8px; border-radius: 22px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
         }
         input.search-input {
-            width: 100%;
-            padding: 18px;
-            font-size: 1.3rem; /* Tulisan besar */
-            text-align: center;
-            border: 2px solid #e5e7eb;
-            border-radius: 15px;
-            outline: none;
-            font-weight: 700;
-            background: #f9fafb;
-            letter-spacing: 1px;
-            margin-top: 10px;
+            width: 100%; border: none; outline: none;
+            padding: 15px; font-size: 1.2rem; text-align: center;
+            font-weight: 700; color: var(--primary);
+            background: transparent; font-family: inherit;
         }
-        input.search-input:focus { border-color: var(--primary); background: white; }
-
+        
         /* HASIL CARIAN */
         .result-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-top: 20px;
-            border: 2px solid var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--white); border-radius: 24px;
+            padding: 25px; margin-top: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            text-align: center; border: 1px solid #f1f5f9;
         }
-        .status-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+        .pill-status { display: inline-block; padding: 6px 18px; border-radius: 50px; font-weight: 800; font-size: 0.85rem; margin-bottom: 15px; }
+        
+        /* ACCORDION (SOALAN LAZIM) */
+        .faq-item { background: var(--white); margin-bottom: 12px; border-radius: 16px; border: 1px solid #f1f5f9; overflow: hidden; }
+        .faq-question {
+            padding: 18px; font-weight: 700; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            color: var(--primary);
         }
+        .faq-answer {
+            padding: 0 18px 18px; display: none; color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;
+        }
+        .faq-item.open .faq-answer { display: block; }
+        .faq-item.open { border-color: var(--primary); }
 
-        /* MENU BAWAH (NAVIGASI) */
+        /* MENU BAWAH */
         .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 10px 30px; /* Extra padding bawah */
-            border-top: 1px solid #e5e7eb;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            z-index: 999;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--white);
+            display: flex; justify-content: space-around;
+            padding: 12px 10px 30px; /* Safe area for iPhone */
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
+            border-top: 1px solid #f1f5f9; z-index: 1000;
         }
-        .nav-btn {
-            text-align: center;
-            color: #9ca3af;
-            background: none;
-            border: none;
-            font-size: 0.75rem;
-            font-weight: 700;
-            flex: 1;
+        .nav-item {
+            border: none; background: none;
+            flex: 1; text-align: center;
+            color: #94a3b8; font-size: 0.7rem; font-weight: 700;
         }
-        .nav-btn.active { color: var(--primary); transform: scale(1.1); transition: 0.3s; }
-        .nav-icon { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+        .nav-item.active { color: var(--primary); }
+        .nav-icon { display: block; font-size: 1.5rem; margin-bottom: 4px; transition: 0.2s; }
+        .nav-item.active .nav-icon { transform: translateY(-3px); }
 
-        /* ANIMASI */
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
-            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        /* LOADING SPINNER */
+        .loading-spinner {
+            display: inline-block; width: 20px; height: 20px;
+            border: 3px solid rgba(0,0,0,0.1); border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite; margin-left: 10px;
+            vertical-align: middle; display: none;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* INFO BOX */
-        .info-box {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            border-left: 5px solid var(--accent);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        /* SIMPAN KE SKRIN (PWA Hint) */
+        .install-hint {
+            background: #ecfdf5; border: 1px solid #a7f3d0;
+            padding: 15px; border-radius: 12px; margin-top: 30px;
+            font-size: 0.85rem; color: #064e3b; text-align: center;
         }
-        .info-title { font-weight: 800; color: var(--primary); margin-bottom: 5px; display: block; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="header-bg">
-        <div class="salam-text" id="ucapanWaktu">Assalamualaikum</div>
-        <h1 class="masjid-name">KHAIRAT DIGITAL</h1>
+    <div class="header-hero">
+        <div class="header-salam" id="txtSalam">Assalamualaikum</div>
+        <h1 class="header-title">KHAIRAT DIGITAL</h1>
     </div>
 
-    <div class="stats-box">
+    <div class="stats-float">
         <div class="stat-card">
-            <span id="total-ahli" class="stat-num">...</span>
-            <span class="stat-label">Ahli Kariah</span>
+            <span id="stat-total" class="stat-num">0</span>
+            <span class="stat-lbl">Ahli Kariah</span>
         </div>
         <div class="stat-card">
-            <span id="total-aktif" class="stat-num">...</span>
-            <span class="stat-label">Status Aktif</span>
+            <span id="stat-active" class="stat-num">0</span>
+            <span class="stat-lbl">Ahli Aktif</span>
         </div>
     </div>
 
-    <div id="tab-carian" class="content-area tab-section active">
-        <a href="https://wa.me/60123456789?text=Assalamualaikum,%20saya%20ingin%20lapor%20kematian." class="btn-sos">
-            🚨 LAPOR KEMATIAN
-        </a>
-
-        <div class="search-container">
-            <label style="font-weight:700; color:#4b5563;">Masukkan No. IC (Tanpa -)</label>
-            <input type="number" id="inputIC" class="search-input" placeholder="Contoh: 8801..." onkeyup="semakAhli()">
-            <p style="font-size:0.8rem; color:#9ca3af; margin-top:10px;">Data dikemaskini secara automatik.</p>
-        </div>
-
-        <div id="hasil-carian"></div>
-    </div>
-
-    <div id="tab-info" class="content-area tab-section">
-        <h2 style="color:var(--primary); text-align:center;">📋 Manfaat Ahli</h2>
-        
-        <div class="info-box">
-            <span class="info-title">✅ Pengurusan Jenazah</span>
-            Percuma untuk ahli & tanggungan (Mandi, Kafan, & Kebumi).
-        </div>
-        <div class="info-box">
-            <span class="info-title">🚐 Van Jenazah</span>
-            Penggunaan percuma untuk jarak dalam kariah (Luar kawasan mengikut kadar).
-        </div>
-        <div class="info-box" style="background: #ecfdf5; border-color: var(--primary);">
-            <span class="info-title">💰 Yuran Tahunan</span>
-            <strong>RM 50.00</strong> / Setahun<br>
-            Bank: <strong>Maybank (Masjid Kariah)</strong><br>
-            No Akaun: <strong>5500 0000 0000</strong>
-        </div>
-    </div>
-
-    <div id="tab-daftar" class="content-area tab-section">
-        <div style="text-align:center; padding: 20px;">
-            <div style="font-size: 3rem; margin-bottom: 10px;">📝</div>
-            <h2 style="margin-top:0;">Pendaftaran Baru</h2>
-            <p>Klik butang di bawah untuk isi borang pendaftaran secara online.</p>
-            
-            <a href="https://forms.google.com" target="_blank" style="display:block; background:var(--primary); color:white; padding:20px; border-radius:15px; text-decoration:none; font-weight:800; font-size:1.1rem; margin-top:20px;">
-                ISI BORANG ONLINE
+    <div id="tab-semak" class="tab-content active">
+        <div class="emergency-grid">
+            <a href="https://wa.me/60123456789?text=Assalamualaikum,%20saya%20ingin%20melaporkan%20kematian." class="btn-sos">
+                🚨 LAPOR (WHATSAPP)
             </a>
-            
-            <p style="margin-top:30px; font-size:0.9rem; color:#6b7280;">Sila sediakan resit bayaran sebelum mengisi borang.</p>
+            <a href="tel:0123456789" class="btn-call">📞</a>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 10px; color: var(--text-muted); font-size: 0.9rem;">
+            Masukkan No. IC (Tanpa sengkang)
+        </div>
+        <div class="search-wrapper">
+            <input type="number" id="inputIC" class="search-input" placeholder="Contoh: 880123..." onkeyup="mulaCarian()">
+        </div>
+        <div id="loading" style="text-align:center; margin-top:10px; font-size:0.8rem; color:#94a3b8; display:none;">
+            Sedang mencari... <div class="loading-spinner" style="display:inline-block"></div>
+        </div>
+
+        <div id="result-box"></div>
+
+        <div class="install-hint">
+            <strong>Tips:</strong> Simpan laman ini di telefon anda.<br>
+            Tekan butang menu (⋮ atau Share) > <em>"Add to Home Screen"</em>.
         </div>
     </div>
 
-    <div class
+    <div id="tab-info" class="tab-content">
+        <h2 style="color:var(--primary); margin-top:0;">📋 Info Penting</h2>
+        
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">💰 Berapa Yuran Tahunan? <span>+</span></div>
+            <div class="faq-answer">
+                Yuran adalah <strong>RM50.00 setahun</strong> bagi satu keluarga. Bayaran perlu dibuat sebelum 31 Mac setiap tahun.
+            </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">🏦 Cara Bayaran? <span>+</span></div>
+            <div class="faq-answer">
+                Bank: <strong>Maybank (Masjid Kariah)</strong><br>
+                No Akaun: <strong>5500 0000 0000</strong><br><br>
+                Sila simpan resit untuk dimuat naik semasa pendaftaran.
+            </div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">✅ Apa Manfaat Ahli? <span>+</span></div>
+            <div class="faq-answer">
+                1. Pengurusan Jenazah Percuma (Mandi, Kafan, Kebumi).<br>
+                2. Penggunaan Van Jenazah percuma dalam kariah.<br>
+                3. Sumbangan tahlil ringkas.
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-daftar" class="tab-content">
+        <div style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">📝</div>
+            <h2 style="margin: 0 0 10px 0; color: var(--primary);">Daftar Baru / Renew</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">
+                Sila pastikan anda mempunyai resit bayaran (gambar) sebelum mengisi borang.
+            </p>
+            <a href="https://forms.google.com/your-form-link" target="_blank" style="background: var(--primary); color: white; padding: 18px 30px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; box-shadow: 0 10px 25px rgba(6,95,70,0.3);">
+                ISI BORANG SEKARANG
+            </a>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('semak', this)">
+            <span class="nav-icon">🔍</span> Semakan
+        </button>
+        <button class="nav-item" onclick="switchTab('info', this)">
+            <span class="nav-icon">📜</span> Info
+        </button>
+        <button class="nav-item" onclick="switchTab('daftar', this)">
+            <span class="nav-icon">📝</span> Daftar
+        </button>
+    </div>
+
+    <script>
+        // --- CONFIG ---
+        // Gantikan link CSV ini dengan link CSV Google Sheets anda jika perlu
+        const csvLink = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
+        let db = [];
+
+        // 1. Logic Ucapan Waktu
+        const jam = new Date().getHours();
+        const txt = document.getElementById('txtSalam');
+        if(jam < 12) txt.innerText = "Assalamualaikum, Selamat Pagi";
+        else if(jam < 19) txt.innerText = "Assalamualaikum, Selamat Petang";
+        else txt.innerText = "Assalamualaikum, Selamat Malam";
+
+        // 2. Tarik Data
+        Papa.parse(csvLink, {
+            download: true, header: true,
+            complete: function(res) {
+                db = res.data.filter(r => r.Nama && r.Nama.trim() !== '');
+                updateStats();
+            }
+        });
+
+        function updateStats() {
+            document.getElementById('stat-total').innerText = db.length;
+            const aktif = db.filter(r => r.Status && r.Status.toLowerCase().includes('aktif')).length;
+            document.getElementById('stat-active').innerText = aktif;
+        }
+
+        // 3. Tab System
+        function switchTab(id, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // 4. Accordion Logic
+        function toggleFaq(el) {
+            el.classList.toggle('open');
+            const span = el.querySelector('.faq-question span');
+            span.innerText = el.classList.contains('open') ? '-' : '+';
+        }
+
+        // 5. Carian Pintar
+        function mulaCarian() {
+            const val = document.getElementById('inputIC').value.trim();
+            const resBox = document.getElementById('result-box');
+            const loader = document.getElementById('loading');
+
+            if(val.length > 2) loader.style.display = 'block';
+            else loader.style.display = 'none';
+
+            if(val.length < 6) {
+                resBox.innerHTML = '';
+                return;
+            }
+
+            // Simulasi loading sekejap untuk UX
+            setTimeout(() => {
+                loader.style.display = 'none';
+                const ahli = db.find(r => r.Ic && r.Ic.toString().trim() === val);
+                
+                if(ahli) {
+                    const status = ahli.Status || "TIDAK PASTI";
+                    const isAktif = status.toLowerCase().includes('aktif');
+                    const tel = ahli['No Telefon'] || '';
+                    
+                    resBox.innerHTML = `
+                        <div class="result-card">
+                            <span class="pill-status" style="background:${isAktif?'#dcfce7':'#fee2e2'}; color:${isAktif?'#166534':'#991b1b'}">
+                                ${status.toUpperCase()}
+                            </span>
+                            <h2 style="margin:0 0 5px 0; color:var(--primary);">${ahli.Nama}</h2>
+                            <p style="color:#64748b; margin:0 0 20px 0; font-size:0.9rem;">No. Ahli: #${ahli.NoAhli}</p>
+                            
+                            <div style="background:#f8fafc; padding:15px; border-radius:15px; text-align:left; margin-bottom:20px;">
+                                <small style="color:#94a3b8; display:block;">No. Telefon Ahli:</small>
+                                <strong style="font-size:1.1rem;">${tel || 'Tiada Rekod'}</strong>
+                            </div>
+
+                            ${tel ? `<a href="https://wa.me/60${tel}" style="display:block; width:100%; padding:15px; background:var(--primary); color:white; text-decoration:none; border-radius:15px; font-weight:700;">💬 WhatsApp Ahli</a>` : ''}
+                        </div>
+                    `;
+                } else {
+                    resBox.innerHTML = `
+                        <div style="text-align:center; padding:30px; color:#ef4444; opacity:0.8;">
+                            <strong>Tiada Rekod Dijumpai</strong><br>
+                            <small>Pastikan nombor IC betul.</small>
+                        </div>
+                    `;
+                }
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>
