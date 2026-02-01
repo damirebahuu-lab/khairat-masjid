@@ -7,58 +7,55 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="KhairatApp">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2910/2910768.png">
-
     <title>Sistem Khairat Digital</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     
     <style>
-        :root {
-            --primary: #064e3b; --accent: #f59e0b; --bg: #f8fafc; --white: #ffffff;
-            --danger: #ef4444; --safe: #10b981; --text: #1e293b;
-        }
+        :root { --primary: #064e3b; --accent: #f59e0b; --bg: #f8fafc; --white: #ffffff; --danger: #ef4444; --text: #1e293b; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
 
-        /* HEADER HERO */
+        /* HEADER */
         .header-hero {
             background: linear-gradient(170deg, var(--primary) 0%, #047857 100%);
-            color: var(--white); padding: 40px 20px 80px; border-radius: 0 0 40px 40px;
+            color: var(--white); padding: 15px 20px 80px; border-radius: 0 0 40px 40px;
             text-align: center; position: relative;
         }
-        .header-title { font-size: 1.8rem; font-weight: 800; margin: 5px 0 0; }
         
-        /* TOMBOL INSTALL APP (BARU) */
+        /* TICKER PENGUMUMAN (Kembali!) */
+        .news-ticker {
+            background: rgba(0,0,0,0.3); border-radius: 50px; padding: 5px 15px;
+            font-size: 0.75rem; color: #fbbf24; margin-bottom: 10px;
+            display: inline-block; width: 100%; white-space: nowrap; overflow: hidden;
+        }
+
+        /* TOMBOL INSTALL */
         #install-banner {
-            display: none; /* Auto show via JS */
-            background: var(--accent); color: #78350f; 
-            padding: 10px 20px; border-radius: 50px; 
-            font-weight: 800; font-size: 0.85rem; margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+            display: none; background: var(--accent); color: #78350f; 
+            padding: 8px 20px; border-radius: 50px; font-weight: 800; font-size: 0.8rem;
+            margin-top: 10px; box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
             cursor: pointer; animation: bounce 2s infinite;
         }
 
-        /* STATISTIK */
+        /* STATISTIK DASHBOARD */
         .stats-grid {
             display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
             padding: 0 15px; margin-top: -60px; position: relative; z-index: 10;
         }
         .stat-card {
-            background: var(--white); padding: 15px 5px; border-radius: 16px;
+            background: var(--white); padding: 12px 5px; border-radius: 16px;
             text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-bottom: 4px solid var(--accent);
         }
-        .stat-num { font-size: 1.4rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
-        .stat-lbl { font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+        .stat-num { font-size: 1.3rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
+        .stat-lbl { font-size: 0.6rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
 
-        /* TABS & CONTENT */
+        /* TAB CONTENT */
         .tab-content { display: none; padding: 20px; animation: slideUp 0.4s ease; }
         .tab-content.active { display: block; }
 
-        /* RESULT CARD */
+        /* HASIL CARIAN */
         .result-card {
             background: white; border-radius: 20px; padding: 25px;
             margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -66,15 +63,16 @@
         }
         .pill { display: inline-block; padding: 5px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; margin-bottom: 15px; }
         .row-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; }
-        .row-val { font-weight: 700; color: var(--text); }
+        .row-val { font-weight: 700; color: var(--text); text-align: right; }
         .label-sm { font-size: 0.75rem; color: #64748b; }
 
-        /* FINANCE & WARIS BOX */
+        /* INFO BOXES */
         .finance-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 15px; border-radius: 12px; margin: 15px 0; }
         .finance-box.alert { background: #fef2f2; border: 1px solid #fecaca; }
         .waris-box { background: #fff7ed; border: 1px solid #ffedd5; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        
-        /* INPUT & BUTTONS */
+        .dl-item { display: flex; justify-content: space-between; padding: 15px; background: white; border-radius: 12px; margin-bottom: 10px; text-decoration: none; color: var(--text); border: 1px solid #e2e8f0; }
+
+        /* BUTTONS & INPUT */
         .search-container {
             background: white; padding: 10px; border-radius: 18px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
@@ -85,7 +83,9 @@
         
         .btn-action { display: block; width: 100%; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; margin-top: 10px; font-size: 0.9rem; }
         .btn-wa { background: var(--primary); color: white; }
-        .btn-sos { background: var(--danger); color: white; padding: 15px; font-size: 1rem; animation: pulse 2s infinite; margin-bottom: 20px; }
+        .btn-sos { background: var(--danger); color: white; padding: 15px; font-size: 1rem; animation: pulse 2s infinite; }
+        .grid-sos { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 20px; }
+        .btn-call { background: white; border: 2px solid var(--danger); color: var(--danger); width: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; text-decoration: none; }
 
         /* NAVIGASI */
         .bottom-nav {
@@ -105,13 +105,14 @@
 <body>
 
     <div class="header-hero">
+        <div class="news-ticker">
+            <marquee id="tickerText" behavior="scroll" direction="left">Selamat Datang ke Portal Khairat Digital...</marquee>
+        </div>
+
         <div id="ucapan" style="font-size:0.9rem; opacity:0.9; margin-bottom:5px;">Assalamualaikum</div>
-        <h1 class="header-title">KHAIRAT DIGITAL</h1>
-        <p style="margin:5px 0 0; font-size:0.8rem; opacity:0.8;">Portal Rasmi Kariah</p>
+        <h1 class="header-title" style="font-size: 1.8rem; font-weight: 800; margin: 0;">KHAIRAT DIGITAL</h1>
         
-        <button id="install-banner" onclick="installApp()">
-            📲 Install App / Simpan ke Telefon
-        </button>
+        <button id="install-banner" onclick="installApp()">📲 Install App</button>
     </div>
 
     <div class="stats-grid">
@@ -132,13 +133,14 @@
     <div style="text-align:center; font-size:0.7rem; color:#94a3b8; margin-top:15px; font-style:italic;" id="tarikhData">...</div>
 
     <div id="tab-semak" class="tab-content active">
-        <a href="https://wa.me/60123456789?text=Assalamualaikum,%20saya%20ingin%20lapor%20kematian." class="btn-action btn-sos">
-            🚨 LAPOR KEMATIAN
-        </a>
+        <div class="grid-sos">
+            <a id="linkLapor" href="#" class="btn-action btn-sos" style="margin-top:0;">🚨 LAPOR WHATSAPP</a>
+            <a id="linkCall" href="#" class="btn-call">📞</a>
+        </div>
 
-        <div style="color:#64748b; font-size:0.85rem; margin-bottom:5px; font-weight:600;">Semakan Status Keahlian:</div>
+        <div style="color:#64748b; font-size:0.85rem; margin-bottom:5px; font-weight:600;">Carian No. Kad Pengenalan:</div>
         <div class="search-container">
-            <input type="number" id="inputIC" class="search-input" placeholder="No. IC (Tanpa -)" onkeyup="cariAuto()">
+            <input type="number" id="inputIC" class="search-input" placeholder="Tanpa sengkang (-)" onkeyup="cariAuto()">
             <button class="btn-cari" onclick="cariManual()">CARI</button>
         </div>
 
@@ -146,54 +148,90 @@
     </div>
 
     <div id="tab-info" class="tab-content">
-        <h3 style="color:var(--primary); margin-top:0;">📋 Info Yuran & Manfaat</h3>
-        <div style="background:white; padding:20px; border-radius:15px; border:1px solid #e2e8f0;">
-            <p><strong>Yuran Tahunan:</strong> RM50.00</p>
-            <p><strong>Bank:</strong> Maybank (Masjid Kariah)</p>
-            <p><strong>No. Akaun:</strong> 5500 1234 5678</p>
-            <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-            <p style="font-size:0.9rem;">Sila jelaskan yuran tertunggak bagi memastikan manfaat khairat (pengurusan jenazah & van) tidak terjejas.</p>
+        <h3 style="color:var(--primary); margin-top:0;">📂 Dokumen & Info</h3>
+        
+        <div style="background:white; padding:20px; border-radius:15px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <p><strong>Yuran Tahunan:</strong> RM 50.00</p>
+            <p><strong>Bank:</strong> <span id="namaBank">Maybank</span></p>
+            <p><strong>No. Akaun:</strong> <span id="noAkaun">5500 1234 5678</span></p>
+            <small style="color:#dc2626; display:block; margin-top:10px;">* Sila simpan resit untuk pendaftaran.</small>
         </div>
+
+        <h4 style="margin-bottom:10px; color:#64748b;">Muat Turun:</h4>
+        <a id="dlBorang" href="#" class="dl-item" target="_blank">
+            <span>📄 Borang Keahlian (PDF)</span> ⬇️
+        </a>
+        <a id="dlTuntut" href="#" class="dl-item" target="_blank">
+            <span>📄 Borang Tuntutan (PDF)</span> ⬇️
+        </a>
     </div>
 
     <div id="tab-daftar" class="tab-content">
         <div style="text-align:center; padding:40px 20px;">
-            <h2 style="color:var(--primary);">Daftar Baru</h2>
+            <h2 style="color:var(--primary);">Pendaftaran Baru</h2>
             <p style="color:#64748b; font-size:0.9rem; margin-bottom:30px;">
                 Isi borang online untuk pendaftaran ahli baru. Kelulusan tertakluk kepada semakan AJK.
             </p>
-            <a href="https://forms.google.com/your-form-link" target="_blank" class="btn-action btn-wa">
-                ISI BORANG PERMOHONAN
-            </a>
+            <a id="linkForm" href="#" target="_blank" class="btn-action btn-wa">ISI BORANG PERMOHONAN</a>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <button class="nav-btn active" onclick="bukaTab('semak', this)">
-            <span class="nav-icon">🔍</span> Semakan
-        </button>
-        <button class="nav-btn" onclick="bukaTab('info', this)">
-            <span class="nav-icon">📋</span> Info
-        </button>
-        <button class="nav-btn" onclick="bukaTab('daftar', this)">
-            <span class="nav-icon">📝</span> Daftar
-        </button>
+        <button class="nav-btn active" onclick="bukaTab('semak', this)"><span class="nav-icon">🔍</span> Semakan</button>
+        <button class="nav-btn" onclick="bukaTab('info', this)"><span class="nav-icon">📂</span> Info</button>
+        <button class="nav-btn" onclick="bukaTab('daftar', this)"><span class="nav-icon">📝</span> Daftar</button>
     </div>
 
     <script>
-        // CONFIG
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
+        // =================================================================
+        // RUANGAN TETAPAN (SILA UBAH DI SINI SAHAJA)
+        // =================================================================
+        
+        // 1. Link Database CSV (Dari Google Sheets > Publish to Web)
+        const URL_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
+        
+        // 2. Link Google Form (Untuk Pendaftaran)
+        const URL_FORM = 'https://forms.google.com/your-form-link';
+        
+        // 3. Link Download PDF (Boleh letak link Google Drive)
+        const URL_PDF_BORANG = '#'; // Masukkan link PDF Borang
+        const URL_PDF_TUNTUTAN = '#'; // Masukkan link PDF Tuntutan
+        
+        // 4. Maklumat AJK (Untuk Lapor Kematian)
+        const NO_TEL_AJK = '60123456789'; // Format: 601...
+        const NO_CALL_AJK = '0123456789'; // Format: 01...
+
+        // 5. Maklumat Bank
+        const NAMA_BANK = 'Maybank (Masjid Kariah)';
+        const NO_AKAUN = '5500 1234 5678';
+        
+        // 6. Pengumuman (Teks Berjalan)
+        const TEKS_PENGUMUMAN = "📢 PENGUMUMAN: Sila jelaskan yuran tahunan sebelum 31 Mac 2026. Mesyuarat Agung akan diadakan tidak lama lagi.";
+
+        // =================================================================
+        // JANGAN UBAH KOD DI BAWAH INI (LOGIK SISTEM)
+        // =================================================================
+
+        // Setup Awal (Masukkan data ke dalam HTML)
+        document.getElementById('linkLapor').href = "https://wa.me/" + NO_TEL_AJK + "?text=Assalamualaikum,%20saya%20ingin%20lapor%20kematian.";
+        document.getElementById('linkCall').href = "tel:" + NO_CALL_AJK;
+        document.getElementById('linkForm').href = URL_FORM;
+        document.getElementById('dlBorang').href = URL_PDF_BORANG;
+        document.getElementById('dlTuntut').href = URL_PDF_TUNTUTAN;
+        document.getElementById('namaBank').innerText = NAMA_BANK;
+        document.getElementById('noAkaun').innerText = NO_AKAUN;
+        document.getElementById('tickerText').innerText = TEKS_PENGUMUMAN;
 
         let db = [];
         const hariIni = new Date().toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' });
         
-        // UI Init
+        // UI Waktu
         document.getElementById('tarikhData').innerText = "Data dikemaskini: " + hariIni;
         const jam = new Date().getHours();
         document.getElementById('ucapan').innerText = jam < 12 ? "Selamat Pagi" : (jam < 19 ? "Selamat Petang" : "Selamat Malam");
 
-        // Load Data
-        Papa.parse(csvUrl, {
+        // Tarik Data CSV
+        Papa.parse(URL_CSV, {
             download: true, header: true,
             complete: function(res) {
                 db = res.data.filter(r => r.Nama && r.Nama.trim() !== '');
@@ -278,7 +316,7 @@
                 res.innerHTML = `
                     <div style="text-align:center; padding:30px; color:#ef4444;">
                         <strong>Tiada Rekod Dijumpai</strong><br>
-                        <small>Pastikan nombor IC betul atau hubungi AJK.</small>
+                        <small>Pastikan nombor IC betul.</small>
                     </div>
                 `;
             }
@@ -287,35 +325,23 @@
         // --- PWA INSTALL LOGIC ---
         let deferredPrompt;
         const installBtn = document.getElementById('install-banner');
-
-        // 1. Cek jika browser boleh install (Android/Chrome)
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             installBtn.style.display = 'inline-block';
         });
-
-        // 2. Logic bila tombol ditekan
         function installApp() {
             if (deferredPrompt) {
-                // Untuk Android
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        installBtn.style.display = 'none';
-                    }
+                    if (choiceResult.outcome === 'accepted') installBtn.style.display = 'none';
                     deferredPrompt = null;
                 });
             } else {
-                // Untuk iOS (Manual Instruction)
-                alert("Untuk pengguna iPhone:\n\n1. Tekan butang 'Share' di bawah (ikon petak dengan panah).\n2. Pilih 'Add to Home Screen'.");
+                alert("Untuk iPhone: Tekan 'Share' > 'Add to Home Screen'.");
             }
         }
-
-        // 3. Sembunyikan tombol jika sudah di-install
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            installBtn.style.display = 'none';
-        }
+        if (window.matchMedia('(display-mode: standalone)').matches) installBtn.style.display = 'none';
     </script>
 </body>
 </html>
