@@ -3,130 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Khairat Masjid</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Portal Khairat Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        :root { --primary: #065f46; --secondary: #fbbf24; --light: #f3f4f6; }
-        body { font-family: 'Poppins', sans-serif; background: var(--light); margin: 0; padding: 0; }
-        .header { background: var(--primary); color: white; padding: 2.5rem 1rem; text-align: center; border-bottom: 5px solid var(--secondary); }
+        :root { --primary: #064e3b; --secondary: #f59e0b; --bg: #f8fafc; --text: #1e293b; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; }
+        
+        /* Navigation & Header */
+        .nav-bar { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .hero { background: linear-gradient(rgba(6,78,59,0.9), rgba(6,78,59,0.9)), url('https://www.transparenttextures.com/patterns/islamic-exercise.png'); color: white; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--secondary); }
+        
+        /* Stats Dashboard */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -30px; padding: 0 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid var(--secondary); }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
+
         .container { max-width: 600px; margin: auto; padding: 20px; }
-        
-        .search-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); margin-top: -30px; }
-        h3 { margin-top: 0; color: var(--primary); }
-        input { width: 100%; padding: 15px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 1.1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1); }
-        
-        .btn-ws { background: #25d366; color: white; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: 600; margin-bottom: 25px; gap: 10px; transition: 0.3s; }
-        .btn-ws:hover { background: #128c7e; transform: translateY(-2px); }
 
-        #result { margin-top: 25px; }
-        .result-box { padding: 20px; border-radius: 12px; background: #f9fafb; border-left: 6px solid #ccc; animation: fadeIn 0.5s; }
-        .status-aktif { border-left-color: #059669; background: #ecfdf5; }
-        .status-tunggakan { border-left-color: #dc2626; background: #fef2f2; }
-        
-        .info-label { font-size: 0.85rem; color: #6b7280; margin-bottom: 2px; }
-        .info-value { font-weight: 600; font-size: 1.1rem; margin-bottom: 12px; color: #111827; }
-        .status-tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-        .tag-aktif { background: #059669; color: white; }
-        .tag-tunggakan { background: #dc2626; color: white; }
+        /* Quick Action Buttons */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .btn { padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem; text-align: center; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-emergency { background: #be123c; color: white; grid-column: span 2; font-size: 1.1rem; }
+        .btn-pay { background: var(--primary); color: white; }
+        .btn-info { background: white; color: var(--primary); border: 1px solid var(--primary); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Search Section */
+        .search-box { background: white; padding: 25px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        input { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
+
+        /* Member Card Result */
+        #result { margin-top: 20px; }
+        .member-card { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; animation: slideUp 0.3s ease-out; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; }
+        .badge-aktif { background: #dcfce7; color: #166534; }
+        .badge-tunggakan { background: #fee2e2; color: #991b1b; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>Khairat Kematian Masjid</h1>
-    <p>Semakan Status & Laporan Kecemasan</p>
+<div class="nav-bar">MASJID Kariah Digital</div>
+
+<div class="hero">
+    <h2 style="margin:0">Sistem Khairat Kematian</h2>
+    <p style="font-size: 0.9rem; opacity: 0.9">Urusan Kebajikan Ahli & Waris Terjamin</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div id="totalAhli" class="stat-value">...</div>
+        <div class="stat-label">Jumlah Ahli</div>
+    </div>
+    <div class="stat-card">
+        <div id="totalKematian" class="stat-value">...</div>
+        <div class="stat-label">Kematian 2026</div>
+    </div>
 </div>
 
 <div class="container">
-    <a href="https://wa.me/60163295331?text=Assalamualaikum%20AJK%20Khairat,%20saya%20ingin%20melaporkan%20kes%20kematian." class="btn-ws">
-        <span>🟢</span> HUBUNGI AJK (LAPOR KEMATIAN)
-    </a>
+    <div class="action-grid">
+        <a href="https://wa.me/60123456789?text=🚨%20LAPOR%20KEMATIAN:%20Sila%20bantu%20kami%20segera." class="btn btn-emergency">🚨 LAPOR KEMATIAN</a>
+        <a href="#" class="btn btn-pay">💳 BAYAR YURAN</a>
+        <a href="#" class="btn btn-info">📜 INFO & MANFAAT</a>
+    </div>
 
-    <div class="search-card">
-        <h3>Semak Ahli</h3>
-        <p style="font-size: 0.9rem; color: #666;">Masukkan No. IC peserta (tanpa dash) untuk melihat rekod maklumat dan bayaran.</p>
-        <input type="text" id="icSearch" placeholder="Cth: 850101105566" onkeyup="searchMember()">
-        
+    <div class="search-box">
+        <h4 style="margin-top:0">Semakan Status Keahlian</h4>
+        <input type="text" id="icInput" placeholder="Masukkan No. IC (Cth: 880101115544)" onkeyup="doSearch()">
         <div id="result"></div>
     </div>
-    
-    <p style="text-align: center; color: #9ca3af; font-size: 0.75rem; margin-top: 30px;">
-        Sistem ini ditarik secara langsung daripada Google Sheets.<br>
-        &copy; 2026 Pengurusan Masjid.
-    </p>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <p style="font-size: 0.8rem; color: #64748b;">
+            <b>Nota:</b> Data dikemaskini secara automatik setiap kali bendahari mengemaskini Google Sheets.
+        </p>
+    </div>
 </div>
 
 <script>
-    // Pautan CSV anda yang telah dikemaskini
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
+    let database = [];
 
-    let dbData = [];
-
-    // Muat data dari Google Sheets
-    function loadData() {
+    function init() {
         Papa.parse(csvUrl, {
             download: true,
             header: true,
             complete: function(results) {
-                dbData = results.data;
+                database = results.data.filter(row => row.Nama); // Buang baris kosong
+                updateDashboard(database);
             }
         });
     }
 
-    function searchMember() {
-        const input = document.getElementById('icSearch').value.trim();
-        const resultDiv = document.getElementById('result');
+    function updateDashboard(data) {
+        document.getElementById('totalAhli').innerText = data.length;
+        // Contoh kiraan kematian (jika anda ada kolum Status: Meninggal)
+        const mati = data.filter(row => row.Status && row.Status.toLowerCase() === 'meninggal').length;
+        document.getElementById('totalKematian').innerText = mati || 0;
+    }
+
+    function doSearch() {
+        const query = document.getElementById('icInput').value.trim();
+        const resDiv = document.getElementById('result');
         
-        if(input.length < 6) {
-            resultDiv.innerHTML = "";
-            return;
-        }
+        if(query.length < 6) { resDiv.innerHTML = ""; return; }
 
-        // Cari data berdasarkan kolumn 'IC'
-        const member = dbData.find(row => row.IC === input);
+        const user = database.find(row => row.IC === query);
 
-        if(member) {
-            const isAktif = member.Status.toLowerCase() === 'aktif';
-            const statusClass = isAktif ? 'status-aktif' : 'status-tunggakan';
-            const tagClass = isAktif ? 'tag-aktif' : 'tag-tunggakan';
-
-            resultDiv.innerHTML = `
-                <div class="result-box ${statusClass}">
-                    <div class="info-label">Nama Penuh</div>
-                    <div class="info-value">${member.Nama}</div>
-                    
-                    <div style="display: flex; justify-content: space-between;">
-                        <div>
-                            <div class="info-label">No. Ahli</div>
-                            <div class="info-value">${member.NoAhli}</div>
-                        </div>
-                        <div>
-                            <div class="info-label">Status</div>
-                            <div class="status-tag ${tagClass}">${member.Status}</div>
-                        </div>
+        if(user) {
+            const isAktif = user.Status.toLowerCase() === 'aktif';
+            resDiv.innerHTML = `
+                <div class="member-card">
+                    <span class="badge ${isAktif ? 'badge-aktif' : 'badge-tunggakan'}">
+                        ${user.Status.toUpperCase()}
+                    </span>
+                    <div style="font-weight:700; font-size: 1.1rem; margin-bottom:5px;">${user.Nama}</div>
+                    <div style="font-size: 0.9rem; color: #64748b;">No. Ahli: <b>${user.NoAhli}</b></div>
+                    <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">No. Tel: ${user['No Telefon'] || '-'}</div>
+                    <hr border="0" style="border-top: 1px solid #eee">
+                    <div style="text-align: right;">
+                        <a href="https://wa.me/60${user['No Telefon']}" style="color: #064e3b; font-size: 0.8rem; text-decoration:none; font-weight:600;">Hubungi Ahli →</a>
                     </div>
-
-                    <div class="info-label">No. Telefon</div>
-                    <div class="info-value">${member['No Telefon'] || 'Tiada Data'}</div>
-                    
-                    <a href="https://wa.me/60${member['No Telefon']}" style="font-size: 0.8rem; color: #059669; text-decoration:none;">📱 WhatsApp Ahli</a>
                 </div>
             `;
         } else {
-            resultDiv.innerHTML = `
-                <div style="text-align:center; padding: 20px; color: #dc2626;">
-                    <strong>Rekod Tidak Dijumpai</strong><br>
-                    Sila pastikan No. IC betul atau hubungi bendahari.
-                </div>
-            `;
+            resDiv.innerHTML = `<div style="text-align:center; padding: 10px; color: #ef4444; font-size: 0.9rem;">Maaf, rekod tidak dijumpai.</div>`;
         }
     }
 
-    window.onload = loadData;
+    window.onload = init;
 </script>
 
 </body>
