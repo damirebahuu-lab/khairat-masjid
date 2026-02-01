@@ -4,138 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Khairat Digital</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
-        :root { --primary: #064e3b; --secondary: #f59e0b; --bg: #f8fafc; --text: #1e293b; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; }
+        :root { --p: #065f46; --p-light: #10b981; --s: #fbbf24; --bg: #f0fdf4; --card: #ffffff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1f2937; margin: 0; line-height: 1.6; }
+
+        /* Floating Header */
+        header { background: var(--p); color: white; padding: 25px 20px 50px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(6,95,70,0.2); }
+        .logo-text { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px; margin: 0; }
         
-        /* Navigation & Header */
-        .nav-bar { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .hero { background: linear-gradient(rgba(6,78,59,0.9), rgba(6,78,59,0.9)), url('https://www.transparenttextures.com/patterns/islamic-exercise.png'); color: white; padding: 40px 20px; text-align: center; border-bottom: 4px solid var(--secondary); }
-        
-        /* Stats Dashboard */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -30px; padding: 0 20px; }
-        .stat-card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid var(--secondary); }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
-        .stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
+        .container { max-width: 500px; margin: -30px auto 0; padding: 0 15px; }
 
-        .container { max-width: 600px; margin: auto; padding: 20px; }
+        /* Interactive Stats Bar */
+        .stats-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .stat-item { background: var(--card); flex: 1; padding: 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(16,185,129,0.1); }
+        .stat-num { display: block; font-weight: 800; font-size: 1.4rem; color: var(--p); }
+        .stat-lab { font-size: 0.7rem; color: #6b7280; text-transform: uppercase; font-weight: 600; }
 
-        /* Quick Action Buttons */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
-        .btn { padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.9rem; text-align: center; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-emergency { background: #be123c; color: white; grid-column: span 2; font-size: 1.1rem; }
-        .btn-pay { background: var(--primary); color: white; }
-        .btn-info { background: white; color: var(--primary); border: 1px solid var(--primary); }
+        /* Quick Buttons Grid */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .m-btn { background: var(--card); padding: 20px; border-radius: 20px; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 2px solid transparent; }
+        .m-btn:active { transform: scale(0.95); background: #f9fafb; }
+        .m-btn.emergency { grid-column: span 2; background: #991b1b; color: white; }
+        .m-btn i { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+        .m-btn-text { font-weight: 700; font-size: 0.9rem; display: block; }
 
-        /* Search Section */
-        .search-box { background: white; padding: 25px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        input { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: var(--secondary); outline: none; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
+        /* Modern Search Card */
+        .search-section { background: var(--card); padding: 25px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .search-title { margin: 0 0 15px; font-weight: 800; font-size: 1.1rem; color: var(--p); }
+        .input-group { position: relative; }
+        input { width: 100%; padding: 18px; border: 2px solid #f3f4f6; border-radius: 18px; font-size: 1rem; font-weight: 600; outline: none; transition: 0.3s; background: #f9fafb; }
+        input:focus { border-color: var(--p-light); background: white; }
 
-        /* Member Card Result */
+        /* Result Animation */
         #result { margin-top: 20px; }
-        .member-card { background: #fff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; animation: slideUp 0.3s ease-out; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; }
-        .badge-aktif { background: #dcfce7; color: #166534; }
-        .badge-tunggakan { background: #fee2e2; color: #991b1b; }
+        .res-card { background: white; border-radius: 20px; padding: 20px; border: 2px solid #ecfdf5; animation: fadeInUp 0.4s ease; }
+        .res-row { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f3f4f6; }
+        .status-pill { padding: 6px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
+        .aktif { background: #dcfce7; color: #166534; }
+        .tunggakan { background: #fee2e2; color: #991b1b; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Footer */
+        footer { text-align: center; padding: 30px; color: #9ca3af; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div class="nav-bar">MASJID Kariah Digital</div>
-
-<div class="hero">
-    <h2 style="margin:0">Sistem Khairat Kematian</h2>
-    <p style="font-size: 0.9rem; opacity: 0.9">Urusan Kebajikan Ahli & Waris Terjamin</p>
-</div>
-
-<div class="stats-grid">
-    <div class="stat-card">
-        <div id="totalAhli" class="stat-value">...</div>
-        <div class="stat-label">Jumlah Ahli</div>
-    </div>
-    <div class="stat-card">
-        <div id="totalKematian" class="stat-value">...</div>
-        <div class="stat-label">Kematian 2026</div>
-    </div>
-</div>
+<header>
+    <p class="logo-text">KHAIRAT DIGITAL</p>
+    <p style="font-size: 0.8rem; opacity: 0.8; font-weight: 600;">Masjid Kariah Anda</p>
+</header>
 
 <div class="container">
-    <div class="action-grid">
-        <a href="https://wa.me/60123456789?text=🚨%20LAPOR%20KEMATIAN:%20Sila%20bantu%20kami%20segera." class="btn btn-emergency">🚨 LAPOR KEMATIAN</a>
-        <a href="#" class="btn btn-pay">💳 BAYAR YURAN</a>
-        <a href="#" class="btn btn-info">📜 INFO & MANFAAT</a>
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span id="countAhli" class="stat-num">0</span>
+            <span class="stat-lab">Ahli Aktif</span>
+        </div>
+        <div class="stat-item">
+            <span id="countKhairat" class="stat-num">0</span>
+            <span class="stat-lab">Kes 2026</span>
+        </div>
     </div>
 
-    <div class="search-box">
-        <h4 style="margin-top:0">Semakan Status Keahlian</h4>
-        <input type="text" id="icInput" placeholder="Masukkan No. IC (Cth: 880101115544)" onkeyup="doSearch()">
+    <div class="menu-grid">
+        <a href="https://wa.me/60123456789?text=KECEMASAN:%20Lapor%20Kematian" class="m-btn emergency">
+            <span class="m-btn-text">🚨 LAPOR KEMATIAN SEGERA</span>
+        </a>
+        <a href="#semak" class="m-btn">
+            <span class="m-btn-text">🔍 Semak Ahli</span>
+        </a>
+        <a href="#" class="m-btn">
+            <span class="m-btn-text">💰 Bayar Yuran</span>
+        </a>
+    </div>
+
+    <div class="search-section" id="semak">
+        <h3 class="search-title">Carian Ahli</h3>
+        <div class="input-group">
+            <input type="number" id="icSearch" placeholder="No. IC (Cth: 920101...)" onkeyup="cariSekarang()">
+        </div>
         <div id="result"></div>
-    </div>
-
-    <div style="margin-top: 30px; text-align: center;">
-        <p style="font-size: 0.8rem; color: #64748b;">
-            <b>Nota:</b> Data dikemaskini secara automatik setiap kali bendahari mengemaskini Google Sheets.
-        </p>
     </div>
 </div>
 
+<footer>
+    <p>Sistem Bersepadu Google Sheets & GitHub<br>&copy; 2026 Pengurusan Khairat Kematian</p>
+</footer>
+
 <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
+    // PAUTAN CSV ANDA
+    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
     let database = [];
 
-    function init() {
-        Papa.parse(csvUrl, {
+    function ambilData() {
+        Papa.parse(url, {
             download: true,
             header: true,
-            complete: function(results) {
-                database = results.data.filter(row => row.Nama); // Buang baris kosong
-                updateDashboard(database);
+            complete: function(r) {
+                database = r.data.filter(x => x.Nama);
+                document.getElementById('countAhli').innerText = database.filter(x => x.Status.toLowerCase() === 'aktif').length;
+                document.getElementById('countKhairat').innerText = database.filter(x => x.Status.toLowerCase() === 'meninggal').length;
             }
         });
     }
 
-    function updateDashboard(data) {
-        document.getElementById('totalAhli').innerText = data.length;
-        // Contoh kiraan kematian (jika anda ada kolum Status: Meninggal)
-        const mati = data.filter(row => row.Status && row.Status.toLowerCase() === 'meninggal').length;
-        document.getElementById('totalKematian').innerText = mati || 0;
-    }
+    function cariSekarang() {
+        const carian = document.getElementById('icSearch').value;
+        const res = document.getElementById('result');
+        if(carian.length < 6) { res.innerHTML = ""; return; }
 
-    function doSearch() {
-        const query = document.getElementById('icInput').value.trim();
-        const resDiv = document.getElementById('result');
-        
-        if(query.length < 6) { resDiv.innerHTML = ""; return; }
+        const ahli = database.find(a => a.IC === carian);
 
-        const user = database.find(row => row.IC === query);
-
-        if(user) {
-            const isAktif = user.Status.toLowerCase() === 'aktif';
-            resDiv.innerHTML = `
-                <div class="member-card">
-                    <span class="badge ${isAktif ? 'badge-aktif' : 'badge-tunggakan'}">
-                        ${user.Status.toUpperCase()}
-                    </span>
-                    <div style="font-weight:700; font-size: 1.1rem; margin-bottom:5px;">${user.Nama}</div>
-                    <div style="font-size: 0.9rem; color: #64748b;">No. Ahli: <b>${user.NoAhli}</b></div>
-                    <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">No. Tel: ${user['No Telefon'] || '-'}</div>
-                    <hr border="0" style="border-top: 1px solid #eee">
-                    <div style="text-align: right;">
-                        <a href="https://wa.me/60${user['No Telefon']}" style="color: #064e3b; font-size: 0.8rem; text-decoration:none; font-weight:600;">Hubungi Ahli →</a>
+        if(ahli) {
+            const isAktif = ahli.Status.toLowerCase() === 'aktif';
+            res.innerHTML = `
+                <div class="res-card">
+                    <div class="res-row" style="border:0">
+                        <span class="status-pill ${isAktif ? 'aktif' : 'tunggakan'}">${ahli.Status.toUpperCase()}</span>
+                        <span style="font-size: 0.7rem; color: #9ca3af;">No. #${ahli.NoAhli}</span>
                     </div>
+                    <div style="font-weight: 800; font-size: 1.2rem; color: var(--p); margin-bottom: 5px;">${ahli.Nama}</div>
+                    <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 15px;">📞 ${ahli['No Telefon'] || 'Tiada No. Tel'}</div>
+                    <a href="https://wa.me/60${ahli['No Telefon']}" style="display:block; text-align:center; padding:10px; background:#f3f4f6; border-radius:12px; text-decoration:none; color:var(--p); font-size:0.8rem; font-weight:700;">Hubungi Ahli WhatsApp</a>
                 </div>
             `;
         } else {
-            resDiv.innerHTML = `<div style="text-align:center; padding: 10px; color: #ef4444; font-size: 0.9rem;">Maaf, rekod tidak dijumpai.</div>`;
+            res.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:#ef4444;">No. IC tidak dijumpai dalam sistem.</p>`;
         }
     }
 
-    window.onload = init;
+    window.onload = ambilData;
 </script>
 
 </body>
