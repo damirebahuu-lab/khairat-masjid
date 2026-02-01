@@ -10,94 +10,64 @@
         :root { --p: #065f46; --p-light: #10b981; --s: #fbbf24; --bg: #f0fdf4; --card: #ffffff; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1f2937; margin: 0; line-height: 1.6; }
-
-        /* Floating Header */
-        header { background: var(--p); color: white; padding: 25px 20px 50px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(6,95,70,0.2); }
-        .logo-text { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.5px; margin: 0; }
-        
-        .container { max-width: 500px; margin: -30px auto 0; padding: 0 15px; }
-
-        /* Interactive Stats Bar */
-        .stats-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .stat-item { background: var(--card); flex: 1; padding: 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(16,185,129,0.1); }
-        .stat-num { display: block; font-weight: 800; font-size: 1.4rem; color: var(--p); }
-        .stat-lab { font-size: 0.7rem; color: #6b7280; text-transform: uppercase; font-weight: 600; }
-
-        /* Quick Buttons Grid */
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-        .m-btn { background: var(--card); padding: 20px; border-radius: 20px; text-decoration: none; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 2px solid transparent; }
-        .m-btn:active { transform: scale(0.95); background: #f9fafb; }
-        .m-btn.emergency { grid-column: span 2; background: #991b1b; color: white; }
-        .m-btn i { font-size: 1.5rem; display: block; margin-bottom: 8px; }
-        .m-btn-text { font-weight: 700; font-size: 0.9rem; display: block; }
-
-        /* Modern Search Card */
-        .search-section { background: var(--card); padding: 25px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .search-title { margin: 0 0 15px; font-weight: 800; font-size: 1.1rem; color: var(--p); }
-        .input-group { position: relative; }
-        input { width: 100%; padding: 18px; border: 2px solid #f3f4f6; border-radius: 18px; font-size: 1rem; font-weight: 600; outline: none; transition: 0.3s; background: #f9fafb; }
-        input:focus { border-color: var(--p-light); background: white; }
-
-        /* Result Animation */
-        #result { margin-top: 20px; }
-        .res-card { background: white; border-radius: 20px; padding: 20px; border: 2px solid #ecfdf5; animation: fadeInUp 0.4s ease; }
-        .res-row { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f3f4f6; }
-        .status-pill { padding: 6px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; }
-        .aktif { background: #dcfce7; color: #166534; }
-        .tunggakan { background: #fee2e2; color: #991b1b; }
-
+        header { background: var(--p); color: white; padding: 30px 20px 60px; text-align: center; border-radius: 0 0 40px 40px; }
+        .logo-text { font-weight: 800; font-size: 1.6rem; margin: 0; }
+        .container { max-width: 500px; margin: -40px auto 0; padding: 0 15px; }
+        .stats-bar { display: flex; gap: 12px; margin-bottom: 25px; }
+        .stat-item { background: var(--card); flex: 1; padding: 15px; border-radius: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .stat-num { display: block; font-weight: 800; font-size: 1.5rem; color: var(--p); }
+        .stat-lab { font-size: 0.7rem; color: #6b7280; font-weight: 700; text-transform: uppercase; }
+        .m-btn { background: #991b1b; color: white; padding: 20px; border-radius: 20px; text-decoration: none; text-align: center; display: block; font-weight: 800; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(153,27,27,0.2); transition: 0.3s; }
+        .m-btn:active { transform: scale(0.98); }
+        .search-section { background: var(--card); padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .search-title { margin: 0 0 15px; font-weight: 800; color: var(--p); }
+        input { width: 100%; padding: 18px; border: 2px solid #f3f4f6; border-radius: 20px; font-size: 1.1rem; font-weight: 600; outline: none; background: #f9fafb; transition: 0.3s; }
+        input:focus { border-color: var(--p-light); background: white; box-shadow: 0 0 0 4px rgba(16,185,129,0.1); }
+        #result { margin-top: 25px; }
+        .res-card { background: white; border-radius: 22px; padding: 25px; border: 2px solid #f0fdf4; animation: fadeInUp 0.5s ease; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+        .status-pill { display: inline-block; padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; margin-bottom: 15px; }
+        .Aktif { background: #dcfce7; color: #166534; }
+        .Tunggakan { background: #fee2e2; color: #991b1b; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Footer */
-        footer { text-align: center; padding: 30px; color: #9ca3af; font-size: 0.8rem; }
+        footer { text-align: center; padding: 40px; color: #9ca3af; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
 <header>
     <p class="logo-text">KHAIRAT DIGITAL</p>
-    <p style="font-size: 0.8rem; opacity: 0.8; font-weight: 600;">Masjid Kariah Anda</p>
+    <p style="font-size: 0.85rem; opacity: 0.9; font-weight: 600;">Sistem Pengurusan Kariah Masjid</p>
 </header>
 
 <div class="container">
     <div class="stats-bar">
         <div class="stat-item">
             <span id="countAhli" class="stat-num">0</span>
-            <span class="stat-lab">Ahli Aktif</span>
+            <span class="stat-lab">Ahli Berdaftar</span>
         </div>
         <div class="stat-item">
-            <span id="countKhairat" class="stat-num">0</span>
-            <span class="stat-lab">Kes 2026</span>
+            <span id="countAktif" class="stat-num">0</span>
+            <span class="stat-lab">Status Aktif</span>
         </div>
     </div>
 
-    <div class="menu-grid">
-        <a href="https://wa.me/60123456789?text=KECEMASAN:%20Lapor%20Kematian" class="m-btn emergency">
-            <span class="m-btn-text">🚨 LAPOR KEMATIAN SEGERA</span>
-        </a>
-        <a href="#semak" class="m-btn">
-            <span class="m-btn-text">🔍 Semak Ahli</span>
-        </a>
-        <a href="#" class="m-btn">
-            <span class="m-btn-text">💰 Bayar Yuran</span>
-        </a>
-    </div>
+    <a href="https://wa.me/60123456789?text=🚨%20KECEMASAN:%20Lapor%20Kematian" class="m-btn">
+        🚨 LAPOR KEMATIAN SEGERA
+    </a>
 
-    <div class="search-section" id="semak">
-        <h3 class="search-title">Carian Ahli</h3>
-        <div class="input-group">
-            <input type="number" id="icSearch" placeholder="No. IC (Cth: 920101...)" onkeyup="cariSekarang()">
-        </div>
+    <div class="search-section">
+        <h3 class="search-title">Semakan Keahlian</h3>
+        <input type="number" id="icSearch" placeholder="Masukkan No. IC (Cth: 88...)" onkeyup="cariSekarang()">
         <div id="result"></div>
     </div>
 </div>
 
 <footer>
-    <p>Sistem Bersepadu Google Sheets & GitHub<br>&copy; 2026 Pengurusan Khairat Kematian</p>
+    <p>&copy; 2026 Pengurusan Masjid Kariah.<br>Data dikemaskini secara langsung.</p>
 </footer>
 
 <script>
-    // PAUTAN CSV ANDA
+    // Pautan CSV anda
     const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6cC-_vzvCXyH5ZmM7nA7S2oNQ7ADlGqqwKLFY51BJ78NID3P_NThCdik9Ka5U9uZbrHum_O3Hyb74/pub?output=csv';
     let database = [];
 
@@ -107,34 +77,44 @@
             header: true,
             complete: function(r) {
                 database = r.data.filter(x => x.Nama);
-                document.getElementById('countAhli').innerText = database.filter(x => x.Status.toLowerCase() === 'aktif').length;
-                document.getElementById('countKhairat').innerText = database.filter(x => x.Status.toLowerCase() === 'meninggal').length;
+                document.getElementById('countAhli').innerText = database.length;
+                document.getElementById('countAktif').innerText = database.filter(x => x.Status === 'Aktif').length;
             }
         });
     }
 
     function cariSekarang() {
-        const carian = document.getElementById('icSearch').value;
+        const carian = document.getElementById('icSearch').value.trim();
         const res = document.getElementById('result');
         if(carian.length < 6) { res.innerHTML = ""; return; }
 
-        const ahli = database.find(a => a.IC === carian);
+        // Menggunakan 'Ic' mengikut tajuk di Google Sheets anda
+        const ahli = database.find(a => a.Ic === carian);
 
         if(ahli) {
-            const isAktif = ahli.Status.toLowerCase() === 'aktif';
+            const statusStyle = ahli.Status === 'Aktif' ? 'Aktif' : 'Tunggakan';
             res.innerHTML = `
                 <div class="res-card">
-                    <div class="res-row" style="border:0">
-                        <span class="status-pill ${isAktif ? 'aktif' : 'tunggakan'}">${ahli.Status.toUpperCase()}</span>
-                        <span style="font-size: 0.7rem; color: #9ca3af;">No. #${ahli.NoAhli}</span>
+                    <div class="status-pill ${statusStyle}">${ahli.Status.toUpperCase()}</div>
+                    <div style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px;">Nama Ahli:</div>
+                    <div style="font-weight: 800; font-size: 1.3rem; color: var(--p); margin-bottom: 15px; line-height: 1.2;">${ahli.Nama}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div>
+                            <div style="font-size: 0.7rem; color: #9ca3af;">No. Ahli</div>
+                            <div style="font-weight: 700;">#${ahli.NoAhli}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.7rem; color: #9ca3af;">No. Telefon</div>
+                            <div style="font-weight: 700;">${ahli['No Telefon'] || '-'}</div>
+                        </div>
                     </div>
-                    <div style="font-weight: 800; font-size: 1.2rem; color: var(--p); margin-bottom: 5px;">${ahli.Nama}</div>
-                    <div style="font-size: 0.85rem; color: #6b7280; margin-bottom: 15px;">📞 ${ahli['No Telefon'] || 'Tiada No. Tel'}</div>
-                    <a href="https://wa.me/60${ahli['No Telefon']}" style="display:block; text-align:center; padding:10px; background:#f3f4f6; border-radius:12px; text-decoration:none; color:var(--p); font-size:0.8rem; font-weight:700;">Hubungi Ahli WhatsApp</a>
+                    <a href="https://wa.me/${ahli['No Telefon']}" style="display:block; text-align:center; padding:15px; background:var(--bg); border-radius:15px; text-decoration:none; color:var(--p); font-size:0.85rem; font-weight:800; border: 1px solid #dcfce7;">
+                        💬 Hubungi Melalui WhatsApp
+                    </a>
                 </div>
             `;
         } else {
-            res.innerHTML = `<p style="text-align:center; font-size:0.8rem; color:#ef4444;">No. IC tidak dijumpai dalam sistem.</p>`;
+            res.innerHTML = `<div style="text-align:center; padding: 20px; color:#ef4444; font-weight:600; font-size:0.9rem;">Rekod tidak dijumpai.<br><span style="font-weight:400; font-size:0.8rem; color:#6b7280;">Sila pastikan No. IC adalah betul.</span></div>`;
         }
     }
 
