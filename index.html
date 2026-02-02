@@ -7,6 +7,7 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Sistem Khairat Digital</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
@@ -14,7 +15,7 @@
     <style>
         :root { --primary: #064e3b; --accent: #f59e0b; --bg: #f8fafc; --white: #ffffff; --danger: #ef4444; --text: #1e293b; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 90px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 100px; }
 
         /* SPLASH SCREEN */
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
@@ -28,8 +29,17 @@
             text-align: center; position: relative;
         }
         
-        /* TICKER */
-        .news-ticker { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 5px 15px; font-size: 0.8rem; color: #fbbf24; margin-bottom: 15px; width: 100%; }
+        /* TICKER PENGUMUMAN */
+        .ticker-wrap { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 5px 15px; margin-bottom: 15px; }
+        .news-ticker { font-size: 0.8rem; color: #fbbf24; width: 100%; border: none; background: transparent; }
+
+        /* BUTANG INSTALL APP (SENTIASA ADA) */
+        .btn-install {
+            background: var(--accent); color: #78350f; font-size: 0.85rem; 
+            padding: 10px 20px; margin-top: 15px; border-radius: 50px; border: none; 
+            font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); animation: bounce 2s infinite;
+        }
 
         /* STATISTIK DASHBOARD */
         .stats-grid {
@@ -47,7 +57,7 @@
         .tab-content { display: none; padding: 20px; animation: slideUp 0.4s ease; }
         .tab-content.active { display: block; }
 
-        /* BUTTONS & SEARCH */
+        /* SEARCH & BUTTONS */
         .search-container { background: white; padding: 10px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .search-input { flex: 1; border: none; outline: none; font-size: 1.2rem; font-weight: 700; color: var(--primary); text-align: center; }
         .btn-cari { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 10px; font-weight: 700; cursor: pointer; }
@@ -55,7 +65,6 @@
         .btn-action { display: block; width: 100%; padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: 800; margin-top: 10px; }
         .btn-wa { background: var(--primary); color: white; }
         .btn-sos { background: var(--danger); color: white; animation: pulse 2s infinite; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .btn-install { background: var(--accent); color: #78350f; font-size: 0.8rem; padding: 10px; margin-top: 10px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; display: none; width: 100%; }
 
         /* RESULT CARD */
         .result-card { background: white; border-radius: 20px; padding: 25px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; }
@@ -78,6 +87,7 @@
         .nav-icon { display: block; font-size: 1.4rem; margin-bottom: 4px; }
 
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
     </style>
 </head>
 <body>
@@ -89,10 +99,15 @@
     </div>
 
     <div class="header-hero">
-        <marquee id="tickerText" class="news-ticker" scrollamount="4">Memuatkan pengumuman...</marquee>
+        <div class="ticker-wrap">
+            <marquee id="tickerText" class="news-ticker" scrollamount="4">Memuatkan pengumuman...</marquee>
+        </div>
         <h1 id="namaMasjid" style="font-size:1.6rem; font-weight:800; margin:5px 0 0; line-height:1.2;">SISTEM KHAIRAT</h1>
         <p id="slogan" style="margin:5px 0 0; font-size:0.85rem; opacity:0.8;">...</p>
-        <button id="installBtn" class="btn-install" onclick="installApp()">📲 Install Aplikasi</button>
+        
+        <button onclick="installApp()" class="btn-install">
+            📲 SIMPAN APP (INSTALL)
+        </button>
     </div>
 
     <div class="stats-grid">
@@ -196,7 +211,8 @@
                 }, 1000);
             })
             .catch(err => {
-                alert("Gagal menyambung ke database.");
+                console.log(err);
+                alert("Gagal menyambung ke database. Sila refresh.");
                 document.getElementById('splash').style.display = 'none';
             });
         });
@@ -244,8 +260,8 @@
                         <h2 style="text-align:center; color:var(--primary); margin:0;">${ahli.Nama}</h2>
                         <p style="text-align:center; color:#64748b; margin-bottom:20px;">#${ahli.NoAhli}</p>
 
-                        <div class="info-row"><span class="label">Kawasan</span><span class="info-val">${ahli.Kawasan}</span></div>
-                        <div class="info-row"><span class="label">Tahun Akhir</span><span class="info-val">${ahli.TahunAkhir}</span></div>
+                        <div class="info-row"><span class="info-val" style="color:#64748b">Kawasan</span><span class="info-val">${ahli.Kawasan}</span></div>
+                        <div class="info-row"><span class="info-val" style="color:#64748b">Tahun Akhir</span><span class="info-val">${ahli.TahunAkhir}</span></div>
 
                         <div class="finance-box ${adaHutang ? 'finance-alert' : ''}">
                             <div class="info-row" style="border:none; margin:0;">
@@ -273,20 +289,28 @@
             }
         }
 
-        // PWA INSTALL LOGIC
+        // =========================================
+        // PWA INSTALL LOGIC (ANDROID & iOS)
+        // =========================================
         let deferredPrompt;
+        
+        // Cek Android/Chrome
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            document.getElementById('installBtn').style.display = 'block';
+            // Butang memang dah ada, cuma simpan event ini
         });
+
         function installApp() {
             if (deferredPrompt) {
+                // Untuk Android yang support
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((result) => {
-                    if (result.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none';
                     deferredPrompt = null;
                 });
+            } else {
+                // Untuk iOS atau Browser lain
+                alert("Untuk Pengguna iPhone / iPad:\n\n1. Tekan butang 'Share' (ikon petak dengan panah di bawah).\n2. Pilih 'Add to Home Screen' (Tambah ke Skrin Utama).");
             }
         }
     </script>
