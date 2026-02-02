@@ -4,234 +4,290 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#064e3b">
-    <title>Sistem Khairat Pintar</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sistem Khairat Digital</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --primary: #064e3b; --accent: #f59e0b; --bg: #f0fdf4; --card-bg: #ffffff; --text: #1e293b; --red: #ef4444; }
+        :root { --primary: #064e3b; --accent: #f59e0b; --bg: #f8fafc; --white: #ffffff; --danger: #ef4444; --text: #1e293b; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 80px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 90px; }
+
+        /* SPLASH SCREEN */
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s; }
+        .splash-logo { font-size: 4rem; animation: pulse 1.5s infinite; margin-bottom: 20px; }
+        .splash-text { color: white; font-weight: 800; font-size: 1.5rem; letter-spacing: 1px; }
 
         /* HEADER */
-        .header {
+        .header-hero {
             background: linear-gradient(160deg, var(--primary) 0%, #047857 100%);
-            color: white; padding: 40px 20px 80px; border-radius: 0 0 35px 35px;
-            text-align: center; box-shadow: 0 4px 20px rgba(6, 78, 59, 0.3);
+            color: var(--white); padding: 20px 20px 90px; border-radius: 0 0 40px 40px;
+            text-align: center; position: relative;
         }
-        .app-title { font-size: 1.6rem; font-weight: 800; margin: 0; line-height: 1.2; }
-        .app-slogan { font-size: 0.9rem; opacity: 0.9; margin-top: 5px; font-weight: 500; }
+        
+        /* TICKER */
+        .news-ticker { background: rgba(0,0,0,0.3); border-radius: 50px; padding: 5px 15px; font-size: 0.8rem; color: #fbbf24; margin-bottom: 15px; width: 100%; }
 
-        /* CARIAN BOX */
-        .search-card {
-            background: white; width: 90%; max-width: 500px; margin: -50px auto 20px;
-            padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative; z-index: 10;
+        /* STATISTIK DASHBOARD */
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+            padding: 0 15px; margin-top: -70px; position: relative; z-index: 10;
         }
-        .input-ic {
-            width: 100%; padding: 15px; font-size: 1.2rem; text-align: center; font-weight: 700;
-            border: 2px solid #cbd5e1; border-radius: 12px; outline: none; transition: 0.3s;
-            color: var(--primary); letter-spacing: 2px;
+        .stat-card {
+            background: var(--white); padding: 15px 5px; border-radius: 16px;
+            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-bottom: 4px solid var(--accent);
         }
-        .input-ic:focus { border-color: var(--accent); background: #fffbeb; }
-        .btn-cari {
-            width: 100%; background: var(--primary); color: white; padding: 15px;
-            border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700;
-            margin-top: 10px; cursor: pointer; transition: 0.2s;
-        }
-        .btn-cari:active { transform: scale(0.98); }
+        .stat-num { font-size: 1.4rem; font-weight: 800; color: var(--primary); display: block; line-height: 1; }
+        .stat-lbl { font-size: 0.65rem; color: #64748b; font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+
+        /* TABS CONTENT */
+        .tab-content { display: none; padding: 20px; animation: slideUp 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        /* BUTTONS & SEARCH */
+        .search-container { background: white; padding: 10px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; gap: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .search-input { flex: 1; border: none; outline: none; font-size: 1.2rem; font-weight: 700; color: var(--primary); text-align: center; }
+        .btn-cari { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        
+        .btn-action { display: block; width: 100%; padding: 15px; border-radius: 15px; text-align: center; text-decoration: none; font-weight: 800; margin-top: 10px; }
+        .btn-wa { background: var(--primary); color: white; }
+        .btn-sos { background: var(--danger); color: white; animation: pulse 2s infinite; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .btn-install { background: var(--accent); color: #78350f; font-size: 0.8rem; padding: 10px; margin-top: 10px; border-radius: 50px; border: none; font-weight: 800; cursor: pointer; display: none; width: 100%; }
 
         /* RESULT CARD */
-        #result-view { display: none; padding: 0 15px; max-width: 500px; margin: 0 auto; }
-        .member-card {
-            background: white; border-radius: 18px; padding: 25px;
-            border: 1px solid #e2e8f0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .status-pill {
-            display: inline-block; padding: 8px 20px; border-radius: 50px;
-            font-weight: 800; font-size: 0.9rem; margin-bottom: 15px;
-        }
-        .status-ok { background: #dcfce7; color: #166534; }
-        .status-alert { background: #fee2e2; color: #991b1b; }
+        .result-card { background: white; border-radius: 20px; padding: 25px; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f1f5f9; }
+        .status-pill { display: inline-block; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; margin-bottom: 15px; }
+        .pill-ok { background: #dcfce7; color: #166534; }
+        .pill-bad { background: #fee2e2; color: #991b1b; }
+        
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; }
+        .info-val { font-weight: 700; color: var(--text); }
+        
+        /* KEWANGAN & WARIS */
+        .finance-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; margin: 15px 0; }
+        .finance-alert { background: #fef2f2; border-color: #fecaca; }
+        .waris-box { background: #fff7ed; border: 1px solid #fed7aa; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
 
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 1rem; border-bottom: 1px dashed #f1f5f9; padding-bottom: 8px; }
-        .info-label { color: #64748b; font-size: 0.9rem; }
-        .info-val { font-weight: 700; text-align: right; }
+        /* NAVIGASI BAWAH */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 10px 0 25px; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .nav-btn { border: none; background: none; flex: 1; text-align: center; color: #94a3b8; font-size: 0.7rem; font-weight: 700; }
+        .nav-btn.active { color: var(--primary); transform: translateY(-3px); transition: 0.3s; }
+        .nav-icon { display: block; font-size: 1.4rem; margin-bottom: 4px; }
 
-        /* ACTIONS */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .btn-act { padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 700; font-size: 0.9rem; display: block; }
-        .btn-wa { background: #25D366; color: white; }
-        .btn-waris { background: white; border: 2px solid #f97316; color: #f97316; }
-
-        /* FOOTER INFO */
-        .footer-info { margin-top: 30px; text-align: center; font-size: 0.85rem; color: #64748b; padding: 20px; }
-        .ticker-box { background: #fff7ed; color: #c2410c; padding: 10px; font-size: 0.85rem; font-weight: 600; text-align: center; border-bottom: 1px solid #ffedd5; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div id="ticker" class="ticker-box">Memuatkan pengumuman...</div>
-
-    <div class="header">
-        <div style="font-size:3rem; margin-bottom:10px;">🕌</div>
-        <h1 id="appTitle" class="app-title">SISTEM KHAIRAT</h1>
-        <p id="appSlogan" class="app-slogan">...</p>
+    <div id="splash">
+        <div class="splash-logo">🕌</div>
+        <div class="splash-text">KHAIRAT DIGITAL</div>
+        <div style="color:rgba(255,255,255,0.7); font-size:0.8rem; margin-top:10px;">Menghubungkan Database...</div>
     </div>
 
-    <div class="search-card">
-        <label style="display:block; text-align:center; color:#64748b; margin-bottom:5px; font-size:0.9rem;">Masukkan No. Kad Pengenalan</label>
-        <input type="number" id="inputIc" class="input-ic" placeholder="Contoh: 800123..." onkeyup="checkEnter(event)">
-        <button onclick="cariAhli()" class="btn-cari" id="btnSearch">SEMAK STATUS</button>
+    <div class="header-hero">
+        <marquee id="tickerText" class="news-ticker" scrollamount="4">Memuatkan pengumuman...</marquee>
+        <h1 id="namaMasjid" style="font-size:1.6rem; font-weight:800; margin:5px 0 0; line-height:1.2;">SISTEM KHAIRAT</h1>
+        <p id="slogan" style="margin:5px 0 0; font-size:0.85rem; opacity:0.8;">...</p>
+        <button id="installBtn" class="btn-install" onclick="installApp()">📲 Install Aplikasi</button>
     </div>
 
-    <div id="result-view">
-        <div class="member-card">
-            <div style="text-align:center;">
-                <span id="pillStatus" class="status-pill status-ok">AKTIF</span>
-            </div>
-            
-            <h2 id="viewNama" style="text-align:center; margin:0 0 5px; color:var(--primary);">...</h2>
-            <p id="viewNoAhli" style="text-align:center; color:#64748b; margin:0 0 20px;">No. Ahli: ...</p>
-
-            <div class="info-row">
-                <span class="info-label">Kawasan</span>
-                <span id="viewKawasan" class="info-val">-</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Tahun Terakhir Bayar</span>
-                <span id="viewTahun" class="info-val">-</span>
-            </div>
-            
-            <div id="boxTunggakan" style="background:#fef2f2; padding:15px; border-radius:10px; margin-top:15px; display:none;">
-                <strong style="color:#ef4444; display:block; margin-bottom:5px;">⚠️ PERLU DIBAYAR</strong>
-                <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:800; color:#991b1b;">
-                    <span id="labelTunggakan">Tunggakan (1 Tahun)</span>
-                    <span id="valTunggakan">RM 50</span>
-                </div>
-            </div>
-
-            <div style="margin-top:20px; background:#f8fafc; padding:15px; border-radius:10px;">
-                <small style="color:#64748b; font-weight:700; display:block; margin-bottom:5px;">WARIS BERDAFTAR</small>
-                <div style="font-weight:700; color:#334155;" id="viewWaris">-</div>
-            </div>
-
-            <div class="action-grid">
-                <a id="btnCallWaris" href="#" class="btn-act btn-waris">📞 Hubungi Waris</a>
-                <a id="btnWhatsapp" href="#" class="btn-act btn-wa">💬 WhatsApp Ahli</a>
-            </div>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span id="stat-total" class="stat-num">...</span>
+            <span class="stat-lbl">Jumlah Ahli</span>
+        </div>
+        <div class="stat-card">
+            <span id="stat-aktif" class="stat-num">...</span>
+            <span class="stat-lbl">Aktif</span>
+        </div>
+        <div class="stat-card" style="border-bottom-color: var(--danger);">
+            <span id="stat-mati" class="stat-num" style="color: var(--danger);">...</span>
+            <span class="stat-lbl">Kematian</span>
         </div>
     </div>
 
-    <div class="footer-info">
-        <strong style="display:block; color:var(--text); font-size:1rem; margin-bottom:5px;">INFO PEMBAYARAN</strong>
-        <span id="viewBank">...</span><br>
-        <span id="viewAkaun" style="font-size:1.2rem; font-weight:800; color:var(--primary);">...</span><br><br>
+    <div id="tab-semak" class="tab-content active">
+        <a id="btnSOS" href="#" class="btn-action btn-sos">🚨 LAPOR KEMATIAN SEGERA</a>
+
+        <div style="text-align:center; color:#64748b; font-size:0.85rem; margin-bottom:5px;">Carian No. Kad Pengenalan</div>
+        <div class="search-container">
+            <input type="number" id="inputIC" class="search-input" placeholder="Contoh: 8801..." onkeyup="checkEnter(event)">
+            <button class="btn-cari" onclick="cariAhli()">CARI</button>
+        </div>
+
+        <div id="result-box"></div>
+    </div>
+
+    <div id="tab-info" class="tab-content">
+        <h3 style="color:var(--primary); margin-top:0;">📂 Info & Bayaran</h3>
+        <div style="background:white; padding:20px; border-radius:15px; border:1px solid #e2e8f0; line-height:1.6;">
+            <p><strong>Yuran Tahunan:</strong> RM <span id="valYuran">...</span></p>
+            <p><strong>Bank:</strong> <span id="valBank">...</span></p>
+            <p><strong>No. Akaun:</strong> <span id="valAkaun" style="font-size:1.2rem; font-weight:800; color:var(--primary);">...</span></p>
+            <hr>
+            <small style="color:#ef4444;">* Sila simpan resit sebagai bukti pembayaran.</small>
+        </div>
         
-        <a id="linkDaftar" href="#" style="background:var(--text); color:white; padding:10px 25px; border-radius:50px; text-decoration:none; font-weight:700;">
-            📝 Daftar Ahli Baru
-        </a>
-        <br><br>
-        Hubungi Admin: <a id="linkAdmin" href="#" style="color:var(--primary); font-weight:700; text-decoration:none;">...</a>
+        <div style="margin-top:20px;">
+            <a id="btnAdmin" href="#" class="btn-action" style="background:white; border:1px solid #cbd5e1; color:#64748b;">📞 Hubungi Admin</a>
+        </div>
+    </div>
+
+    <div id="tab-daftar" class="tab-content">
+        <div style="text-align:center; padding:40px 20px;">
+            <h2 style="color:var(--primary);">Pendaftaran Baru</h2>
+            <p style="color:#64748b; font-size:0.9rem; margin-bottom:30px;">
+                Isi borang online untuk pendaftaran ahli baru.
+            </p>
+            <a id="btnDaftar" href="#" target="_blank" class="btn-action btn-wa">ISI BORANG PERMOHONAN</a>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="bukaTab('semak', this)"><span class="nav-icon">🔍</span> Semakan</button>
+        <button class="nav-btn" onclick="bukaTab('info', this)"><span class="nav-icon">📋</span> Info</button>
+        <button class="nav-btn" onclick="bukaTab('daftar', this)"><span class="nav-icon">📝</span> Daftar</button>
     </div>
 
     <script>
-        // ===========================================
+        // ==========================================
         // PASTE LINK WEB APP SCRIPT ANDA DI SINI
-        // ===========================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXpTaJt5pf70SF-aDGAzqra8sLnft0MM5gTaxv3Y7LQoQZ7we0lex8mArpeMngba-p/exec';
-        
-        // GLOBAL VARIABLES
-        let YURAN_TAHUNAN = 50; 
+        // ==========================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLamk90pGs4nhqPRcSugzelxmqenqrYJehQcL5z7Do7bKZ6iJWGm2cRxc3UwFu_MNi/exec'; 
 
-        // 1. INIT: TARIK SETUP DARI EXCEL
+        // GLOBAL VARS
+        let dbAhli = [];
+        let config = {};
+        let YURAN = 0;
+
+        // INIT SYSTEM
         document.addEventListener('DOMContentLoaded', () => {
-            fetch(SCRIPT_URL + '?action=getSettings')
+            fetch(SCRIPT_URL)
             .then(res => res.json())
             .then(data => {
-                // Masukkan data ke UI
-                document.getElementById('appTitle').innerText = data.NamaMasjid;
-                document.getElementById('appSlogan').innerText = data.Slogan;
-                document.getElementById('ticker').innerText = data.Pengumuman;
-                
-                document.getElementById('viewBank').innerText = data.NamaBank;
-                document.getElementById('viewAkaun').innerText = data.NoAkaun;
-                
-                document.getElementById('linkDaftar').href = data.LinkBorang;
-                document.getElementById('linkAdmin').innerText = "0" + data.TelAdmin;
-                document.getElementById('linkAdmin').href = "https://wa.me/" + data.TelAdmin;
+                dbAhli = data.db;
+                config = data.config;
+                YURAN = parseInt(config.YuranTahunan);
 
-                YURAN_TAHUNAN = parseInt(data.YuranTahunan); // Simpan nilai yuran
+                // Setup UI dari Config
+                document.getElementById('namaMasjid').innerText = config.NamaMasjid;
+                document.getElementById('slogan').innerText = config.Slogan;
+                document.getElementById('tickerText').innerText = config.Pengumuman;
+                
+                document.getElementById('valYuran').innerText = YURAN;
+                document.getElementById('valBank').innerText = config.NamaBank;
+                document.getElementById('valAkaun').innerText = config.NoAkaun;
+                
+                document.getElementById('btnSOS').href = `https://wa.me/${config.TelAdmin}?text=Assalamualaikum,%20saya%20ingin%20lapor%20kematian.`;
+                document.getElementById('btnAdmin').href = `https://wa.me/${config.TelAdmin}`;
+                document.getElementById('btnDaftar').href = config.LinkBorang;
+
+                // Setup Statistik Dashboard
+                updateStats();
+
+                // Matikan Splash
+                setTimeout(() => {
+                    document.getElementById('splash').style.opacity = '0';
+                    setTimeout(()=>document.getElementById('splash').style.display='none', 500);
+                }, 1000);
+            })
+            .catch(err => {
+                alert("Gagal menyambung ke database.");
+                document.getElementById('splash').style.display = 'none';
             });
         });
 
-        // 2. FUNGSI CARI AHLI
-        function cariAhli() {
-            const ic = document.getElementById('inputIc').value;
-            if(!ic) return alert("Sila masukkan No. IC");
-
-            const btn = document.getElementById('btnSearch');
-            btn.innerHTML = "SEDANG SEMAK...";
-            btn.disabled = true;
-
-            fetch(SCRIPT_URL + '?action=search&ic=' + ic)
-            .then(res => res.json())
-            .then(data => {
-                btn.innerHTML = "SEMAK STATUS";
-                btn.disabled = false;
-
-                if(!data) return alert("Rekod tidak dijumpai. Sila hubungi admin.");
-
-                // Papar Data
-                document.getElementById('result-view').style.display = 'block';
-                document.getElementById('viewNama').innerText = data.Nama;
-                document.getElementById('viewNoAhli').innerText = "#" + data.NoAhli;
-                document.getElementById('viewKawasan').innerText = data.Kawasan;
-                document.getElementById('viewTahun').innerText = data.TahunAkhir;
-                document.getElementById('viewWaris').innerText = data.Waris;
-
-                // LOGIK PINTAR: KIRA HUTANG
-                const currentYear = new Date().getFullYear();
-                const lastPay = parseInt(data.TahunAkhir);
-                const hutangTahun = currentYear - lastPay;
-
-                // Setup Status
-                const pill = document.getElementById('pillStatus');
-                const boxHutang = document.getElementById('boxTunggakan');
-
-                if (data.Status === "Meninggal") {
-                    pill.className = "status-pill status-alert";
-                    pill.innerText = "MENINGGAL DUNIA";
-                    boxHutang.style.display = 'none';
-                } 
-                else if (hutangTahun > 0) {
-                    // Ada Tunggakan
-                    pill.className = "status-pill status-alert";
-                    pill.innerText = "TUNGGAKAN";
-                    
-                    const jumlahHutang = hutangTahun * YURAN_TAHUNAN;
-                    
-                    boxHutang.style.display = 'block';
-                    document.getElementById('labelTunggakan').innerText = `Tunggakan (${hutangTahun} Tahun)`;
-                    document.getElementById('valTunggakan').innerText = `RM ${jumlahHutang}`;
-                } else {
-                    // Bersih
-                    pill.className = "status-pill status-ok";
-                    pill.innerText = "AKTIF / LUNAS";
-                    boxHutang.style.display = 'none';
-                }
-
-                // Setup Buttons
-                document.getElementById('btnWhatsapp').href = `https://wa.me/6${data.NoTelefon}`;
-                document.getElementById('btnCallWaris').href = `tel:${data.TelWaris}`;
-
-                // Scroll ke bawah
-                document.getElementById('result-view').scrollIntoView({behavior: 'smooth'});
-            });
+        function updateStats() {
+            document.getElementById('stat-total').innerText = dbAhli.length;
+            document.getElementById('stat-aktif').innerText = dbAhli.filter(r => String(r.Status).toLowerCase().includes('aktif')).length;
+            document.getElementById('stat-mati').innerText = dbAhli.filter(r => String(r.Status).toLowerCase().includes('meninggal')).length;
         }
 
-        function checkEnter(e) {
-            if(e.key === "Enter") cariAhli();
+        function bukaTab(id, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + id).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function checkEnter(e) { if(e.key === "Enter") cariAhli(); }
+
+        function cariAhli() {
+            const input = document.getElementById('inputIC').value.trim();
+            const resBox = document.getElementById('result-box');
+            
+            if(!input) return;
+
+            const ahli = dbAhli.find(r => String(r.Ic).trim() == input);
+
+            if(ahli) {
+                // LOGIK KIRA HUTANG
+                const thnAkhir = parseInt(ahli.TahunAkhir);
+                const thnSkrg = new Date().getFullYear();
+                const hutangThn = thnSkrg - thnAkhir;
+                
+                const isMati = String(ahli.Status).toLowerCase().includes('meninggal');
+                const adaHutang = !isMati && hutangThn > 0;
+                
+                let statusText = isMati ? "MENINGGAL DUNIA" : (adaHutang ? "TUNGGAKAN" : "AKTIF");
+                let pillClass = isMati || adaHutang ? "pill-bad" : "pill-ok";
+
+                resBox.innerHTML = `
+                    <div class="result-card">
+                        <div style="text-align:center;">
+                            <span class="status-pill ${pillClass}">${statusText}</span>
+                        </div>
+                        <h2 style="text-align:center; color:var(--primary); margin:0;">${ahli.Nama}</h2>
+                        <p style="text-align:center; color:#64748b; margin-bottom:20px;">#${ahli.NoAhli}</p>
+
+                        <div class="info-row"><span class="label">Kawasan</span><span class="info-val">${ahli.Kawasan}</span></div>
+                        <div class="info-row"><span class="label">Tahun Akhir</span><span class="info-val">${ahli.TahunAkhir}</span></div>
+
+                        <div class="finance-box ${adaHutang ? 'finance-alert' : ''}">
+                            <div class="info-row" style="border:none; margin:0;">
+                                <span>STATUS BAYARAN</span>
+                                <strong style="color:${adaHutang ? '#dc2626' : '#166534'}">
+                                    ${adaHutang ? `TERHUTANG RM ${hutangThn * YURAN}` : 'LUNAS'}
+                                </strong>
+                            </div>
+                            ${adaHutang ? `<small style="color:#dc2626; display:block; margin-top:5px;">Sila jelaskan tunggakan ${hutangThn} tahun.</small>` : ''}
+                        </div>
+
+                        <div class="waris-box">
+                            <small style="color:#ea580c; font-weight:700;">WARIS UTAMA</small>
+                            <div style="font-weight:700; font-size:1.1rem; margin-top:5px;">${ahli.Waris}</div>
+                            <div style="margin-top:10px;">
+                                <a href="tel:${ahli.TelWaris}" style="text-decoration:none; color:#ea580c; font-weight:700;">📞 Hubungi Waris</a>
+                            </div>
+                        </div>
+
+                        <a href="https://wa.me/6${ahli.NoTelefon}" class="btn-action btn-wa">💬 WhatsApp Ahli</a>
+                    </div>
+                `;
+            } else {
+                resBox.innerHTML = `<div style="text-align:center; padding:30px; color:#ef4444;"><strong>Tiada Rekod</strong><br>Sila hubungi admin untuk semakan.</div>`;
+            }
+        }
+
+        // PWA INSTALL LOGIC
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').style.display = 'block';
+        });
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((result) => {
+                    if (result.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none';
+                    deferredPrompt = null;
+                });
+            }
         }
     </script>
 </body>
